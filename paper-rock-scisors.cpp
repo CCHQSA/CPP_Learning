@@ -8,12 +8,30 @@ void showWinner(char user, char computer);
 
 
 int main(){
+  srand((time(0)));
+  bool playAgain = true;
   std::cout << "Welcome to Rock, Paper, Scissors!" << std::endl;
+  do{
   char user = userChoice();
   char computer = computerChoice();
   showChoices(user);
   showChoices(computer);
   showWinner(user, computer);
+  std::cout << "Do you want to play again? (y/n): ";
+  
+  std::cout << "Play again? (y/n): ";
+  char again;
+  std::cin >> again;
+  if(again == 'y' || again == 'Y'){
+    playAgain = true;
+  }else if(again == 'n' || again == 'N'){
+    playAgain = false;
+  }else{
+    std::cout << "Invalid input. Exiting the game." << std::endl;
+    playAgain = false;
+  }
+  }while(playAgain);
+
 }
 
 char computerChoice(){
