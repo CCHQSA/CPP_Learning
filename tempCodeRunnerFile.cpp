@@ -1,55 +1,32 @@
 #include <iostream>
-#include<ctime>
 
-char userChoice();
-char computerChoice();
-void showChoices(char choice);
-void showWinner(char user, char computer);
+void sort(int arr[], int size);
 
-
-int main(){
-  std::cout << "Welcome to Rock, Paper, Scissors!" << std::endl;
-  std::cout<< showChoices(userChoice()) <<" vs " << showChoices(computerChoice()) << std::endl;
-  showWinner(userChoice(), computerChoice());
+int main()
+{
+    int arr[] = {1,4,5,6,8,10};
+    for(int elem : arr){
+        std::cout << elem << " ";
+    }
+    
+    int size = sizeof(arr)/sizeof(arr[0]);
+    
+    sort(arr, size);
+    
+    for(int elem : arr){
+        std::cout << elem << " ";
+    }
+    return 0;
 }
 
-char computerChoice(){
-  srand(time(0));
-  int randomNum = rand() % 3 + 1;
-  switch(randomNum){
-    case 0: return 'r';
-    case 1: return 'p';
-    case 2: return 's';
-  }
-}
-
-char userChoice(){
-  char choice;
-  std::cout << "Enter your choice (r for rock, p for paper, s for scissors): ";
-  std::cin >> choice;
-  if(choice != 'r' && choice != 'p' && choice != 's'){
-    std::cout << "Invalid choice. Please try again." << std::endl;
-    return userChoice();
-  }
-  return choice;
-}
-void showChoices(char choice){
-  switch(choice){
-    case 'r': std::cout << "Rock";
-              break;
-    case 'p': std::cout << "Paper";
-              break;
-    case 's': std::cout << "Scissors";
-              break;
-  }
-}
-
-void showWinner(char user, char computer){
-  if(user == computer){
-    std::cout <<"Tie";
-  }else if((user == 'r' && computer == 's') || (user == 'p' && computer == 'r') || (user == 's' && computer == 'p')){
-    std::cout << "You win!";
-  }else{
-    std::cout << "Computer wins!";
-  }
+void sort(int arr[], int size){
+    for(int i = 0; i < size - 1; i++){
+        for (int j = 0; i < size - 1; i++) {
+            if(arr[j] > arr[j+1]){
+                int temp = arr[j];
+                arr[j] = arr[j+1];
+                arr[j+1] = temp;
+            }
+        }
+    }
 }
