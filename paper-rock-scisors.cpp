@@ -9,18 +9,21 @@ void showWinner(char user, char computer);
 
 int main(){
   std::cout << "Welcome to Rock, Paper, Scissors!" << std::endl;
-  std::cout<< showChoices(userChoice()) <<" vs " << showChoices(computerChoice()) << std::endl;
-  showWinner(userChoice(), computerChoice());
+  char user = userChoice();
+  char computer = computerChoice();
+  showChoices(user);
+  showChoices(computer);
+  showWinner(user, computer);
 }
 
 char computerChoice(){
-  srand(time(0));
-  int randomNum = rand() % 3 + 1;
+  int randomNum = rand() % 3; 
   switch(randomNum){
     case 0: return 'r';
     case 1: return 'p';
     case 2: return 's';
   }
+  return 'r';
 }
 
 char userChoice(){
@@ -35,21 +38,21 @@ char userChoice(){
 }
 void showChoices(char choice){
   switch(choice){
-    case 'r': std::cout << "Rock";
+    case 'r': std::cout << "Rock" <<"\n";
               break;
-    case 'p': std::cout << "Paper";
+    case 'p': std::cout << "Paper" <<"\n";
               break;
-    case 's': std::cout << "Scissors";
+    case 's': std::cout << "Scissors" <<"\n";
               break;
   }
 }
 
 void showWinner(char user, char computer){
   if(user == computer){
-    std::cout <<"Tie";
+    std::cout <<"Tie" << std::endl;
   }else if((user == 'r' && computer == 's') || (user == 'p' && computer == 'r') || (user == 's' && computer == 'p')){
-    std::cout << "You win!";
+    std::cout << "You win!" << std::endl;
   }else{
-    std::cout << "Computer wins!";
+    std::cout << "Computer wins!" << std::endl;
   }
 }
