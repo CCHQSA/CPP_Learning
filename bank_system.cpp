@@ -62,7 +62,7 @@ double deposit(std::vector<std::string>& history) {
     std::cout << "Enter the amount to deposit: ";
     std::cin >> amount;
     
-    if (amount < 0) {
+    if (amount <= 0) {
         std::cout << "Invalid amount. Deposit failed." << std::endl;
         return 0;
     }
@@ -76,7 +76,7 @@ double withdraw(double balance, std::vector<std::string>& history) {
     std::cout << "Enter the amount to withdraw: ";
     std::cin >> amount;
 
-    if (amount < 0) {
+    if (amount <= 0) {
         std::cout << "Invalid amount. Withdrawal failed." << std::endl;
         return 0;
     }
