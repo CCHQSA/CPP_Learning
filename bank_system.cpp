@@ -4,25 +4,30 @@
 #include <iomanip>
 #include <vector>
 
+struct Transaction {
+    std::string name;
+    double amount;
+};
+
 void showBalance(double balance);
-double deposit(double& balance, std::vector<std::string>& history);
-double withdraw(double& balance, std::vector<std::string>& history);
-void showHistory(const std::vector<std::string>& history);
-void clearHistory(std::vector<std::string>& history);
+double deposit(double& balance, std::vector<Transaction>& history);
+double withdraw(double& balance, std::vector<Transaction>& history);
+void showHistory(const std::vector<Transaction>& history);
+void clearHistory(std::vector<Transaction>& history);
+
 
 int main() {
     double balance = 0;
     int choice = 0;
-    std::vector<std::string> history = {};
+    std::vector<Transaction> history = {};
 
     do {
-
         std::cout << "\n--- BANKING SYSTEM ---" << std::endl;
         std::cout << "1. Show Balance" << std::endl;
         std::cout << "2. Deposit" << std::endl;
         std::cout << "3. Withdraw" << std::endl;
         std::cout << "4. History" << std::endl;
-        std::cout << "5.Clear History" << std::endl;
+        std::cout << "5. Clear History" << std::endl;
         std::cout << "6. Exit" << std::endl;
         std::cout << "Enter your choice: ";
         std::cin >> choice;
@@ -62,7 +67,8 @@ void showBalance(double balance) {
     std::cout << "Your current balance is: $" << std::fixed << std::setprecision(2) << balance << std::endl;
 }
 
-double deposit(double& balance, std::vector<std::string>& history) {
+double deposit(double& balance, std::vector<Transaction>& history) {
+    Transaction transaction;
     double amount = 0;
     std::cout << "Enter the amount to deposit: ";
     std::cin >> amount;
@@ -74,11 +80,14 @@ double deposit(double& balance, std::vector<std::string>& history) {
 
     balance += amount;
 
-    history.push_back("Deposit: +$" + std::to_string(amount));
+    transaction.name = "Deposit";
+    transaction.amount = amount;
+    history.push_back(transaction);
     return amount;
 }
 
-double withdraw(double& balance, std::vector<std::string>& history) {
+double withdraw(double& balance, std::vector<Transaction>& history) {
+    Transaction transaction;
     double amount = 0;
     std::cout << "Enter the amount to withdraw: ";
     std::cin >> amount;
@@ -95,28 +104,30 @@ double withdraw(double& balance, std::vector<std::string>& history) {
 
     balance -= amount;
 
-    history.push_back("Withdraw: -$" + std::to_string(amount));
+    transaction.name = "Withdrawal";
+    transaction.amount = amount;
+    history.push_back(transaction); 
 
     return amount;
 }
 
-void showHistory(const std::vector<std::string>& history) {
+void showHistory(const std::vector<Transaction>& history) {
     std::cout << "\n--- TRANSACTION HISTORY ---\n";
     if (history.empty()) {
         std::cout << "No transactions yet.\n";
         return;
     }
-    for (size_t i = 0; i < history.size(); i++) {
-        std::cout << history[i] << std::endl;
+
+    for(const Transaction& transaction : history) {
+        std::cout << transaction.name << ": $" << std::fixed << std::setprecision(2) << transaction.amount << "\n";
     }
 }
 
-
-void clearHistory(std::vector<std::string>& history){
-    if(!history.empty()){
-        history = {};
-        std::cout<<"History has been deleted";
-    }else{
-        std::cout<<"History already clear";
+void clearHistory(std::vector<Transaction>& history) {
+    if(!history.empty()) {
+        history.clear();
+        std::cout << "History has been deleted\n";
+    } else {
+        std::cout << "History already clear\n";
     }
 }
