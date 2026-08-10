@@ -3,6 +3,7 @@
 #include <ctime>
 #include <iomanip>
 #include <vector>
+#include <algorithm>
 
 struct Transaction {
     std::string name;
@@ -10,14 +11,21 @@ struct Transaction {
 };
 
 void showBalance(double balance);
-void deposit(double& balance, std::vector<Transaction>& history);
-void withdraw(double& balance, std::vector<Transaction>& history);
+void deposit(double& balance, std::vector<Transaction>& history, double& totalDeposits, int& numOfDeposits);
+void withdraw(double& balance, std::vector<Transaction>& history, double& totalWithdraws, int& numOfWithdraws);
 void showHistory(const std::vector<Transaction>& history);
 void clearHistory(std::vector<Transaction>& history);
+double findLargestTransaction(std::vector<Transaction>& history);
+void showStatistics(double& totalDeposits,double& totalWithdraws, int& numOfDeposits, int& numOfWithdraws, std::vector<Transaction>& history);
 
 
 int main() {
     double balance = 0;
+    double totalDeposits = 0;
+    double totalWithdraws = 0;
+    int numOfDeposits = 0;
+    int numOfWithdraws = 0;
+    double largestTransaction = 0;
     int choice = 0;
     std::vector<Transaction> history = {};
 
@@ -28,7 +36,8 @@ int main() {
         std::cout << "3. Withdraw" << std::endl;
         std::cout << "4. History" << std::endl;
         std::cout << "5. Clear History" << std::endl;
-        std::cout << "6. Exit" << std::endl;
+        std::cout << "6. Show Statistics" <<std::endl;
+        std::cout << "7. Exit" << std::endl;
         std::cout << "Enter your choice: ";
         std::cin >> choice;
 
@@ -39,11 +48,11 @@ int main() {
                 showBalance(balance);
                 break;
             case 2:
-                deposit(balance, history);
+                deposit(balance, history, totalDeposits, numOfDeposits);
                 showBalance(balance); 
                 break;
             case 3:
-                withdraw(balance, history);
+                withdraw(balance, history, totalWithdraws, numOfWithdraws);
                 showBalance(balance); 
                 break;
             case 4:
@@ -53,12 +62,15 @@ int main() {
                 clearHistory(history);
                 break;
             case 6:
+                showStatistics(totalDeposits, totalWithdraws, numOfDeposits, numOfWithdraws, history);
+                break;
+            case 7:
                 std::cout << "Exiting the program. Thank you!" << std::endl;
                 break;
             default:
                 std::cout << "Invalid choice. Please try again." << std::endl;
         }
-    } while(choice != 6);
+    } while(choice != 7);
 
     return 0;
 }
@@ -67,9 +79,7 @@ void showBalance(double balance) {
     std::cout << "Your current balance is: $" << std::fixed << std::setprecision(2) << balance << std::endl;
 }
 
-void deposit(double& balance, std::vector<Transaction>& history) {
-    Transaction transaction;
-    double amount = 0;
+void deposit(double& balance, std::vector<Transaction>& history, double& totalDeposits, int& numOfDeposits) {    double amount = 0;
     std::cout << "Enter the amount to deposit: ";
     std::cin >> amount;
     
@@ -79,14 +89,13 @@ void deposit(double& balance, std::vector<Transaction>& history) {
     }
 
     balance += amount;
-
-    transaction.name = "Deposit";
-    transaction.amount = amount;
+    totalDeposits += amount;
+    Transaction transaction{"Deposit", amount};
     history.push_back(transaction);
+    numOfDeposits++;
 }
 
-void withdraw(double& balance, std::vector<Transaction>& history) {
-    Transaction transaction;
+void withdraw(double& balance, std::vector<Transaction>& history, double& totalWithdraws, int& numOfWithdraws) {
     double amount = 0;
     std::cout << "Enter the amount to withdraw: ";
     std::cin >> amount;
@@ -102,10 +111,10 @@ void withdraw(double& balance, std::vector<Transaction>& history) {
     }
 
     balance -= amount;
-
-    transaction.name = "Withdrawal";
-    transaction.amount = amount;
+    totalWithdraws += amount;
+    Transaction transaction{"Withdrawal", amount};
     history.push_back(transaction); 
+    numOfWithdraws++;
 }
 
 void showHistory(const std::vector<Transaction>& history) {
@@ -127,4 +136,28 @@ void clearHistory(std::vector<Transaction>& history) {
     } else {
         std::cout << "History already clear\n";
     }
+}
+
+double findLargestTransaction(std::vector<Transaction>& history) {
+    if (history.empty()) {
+        return 0.0; 
+    }
+
+    std::vector<double> amounts;
+    for (const auto& tx : history) {
+        amounts.push_back(tx.amount); 
+    }
+
+    auto max_it = std::max_element(amounts.begin(), amounts.end());
+    return *max_it;
+}
+
+void showStatistics(double& totalDeposits,double& totalWithdraws, int& numOfDeposits, int& numOfWithdraws, std::vector<Transaction>& history){
+    std::cout<<"--- Statistics ---" <<"\n";
+    std::cout<<"Total deposited: $" << totalDeposits <<std::endl;
+    std::cout<<"Total withdrawn: $" << totalWithdraws <<std::endl;
+    std::cout<<"Number of deposits: " <<numOfDeposits <<std::endl;
+    std::cout<<"Number of withdrawals: " <<numOfWithdraws <<std::endl;
+    std::cout<<"Largest transaction: " <<findLargestTransaction(history) <<std::endl;
+    std::cout<<"------------------" <<std::endl;
 }
