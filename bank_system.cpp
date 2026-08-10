@@ -5,8 +5,8 @@
 #include <vector>
 
 void showBalance(double balance);
-double deposit(std::vector<std::string>& history);
-double withdraw(double balance, std::vector<std::string>& history);
+double deposit(double& balance, std::vector<std::string>& history);
+double withdraw(double& balance, std::vector<std::string>& history);
 void showHistory(const std::vector<std::string>& history);
 
 int main() {
@@ -32,11 +32,11 @@ int main() {
                 showBalance(balance);
                 break;
             case 2:
-                balance += deposit(history);
+                deposit(balance, history);
                 showBalance(balance); 
                 break;
             case 3:
-                balance -= withdraw(balance, history);
+                withdraw(balance, history);
                 showBalance(balance); 
                 break;
             case 4:
@@ -57,7 +57,7 @@ void showBalance(double balance) {
     std::cout << "Your current balance is: $" << std::fixed << std::setprecision(2) << balance << std::endl;
 }
 
-double deposit(std::vector<std::string>& history) {
+double deposit(double& balance, std::vector<std::string>& history) {
     double amount = 0;
     std::cout << "Enter the amount to deposit: ";
     std::cin >> amount;
@@ -67,11 +67,13 @@ double deposit(std::vector<std::string>& history) {
         return 0;
     }
 
+    balance += amount;
+
     history.push_back("Deposit: +$" + std::to_string(amount));
     return amount;
 }
 
-double withdraw(double balance, std::vector<std::string>& history) {
+double withdraw(double& balance, std::vector<std::string>& history) {
     double amount = 0;
     std::cout << "Enter the amount to withdraw: ";
     std::cin >> amount;
@@ -86,6 +88,8 @@ double withdraw(double balance, std::vector<std::string>& history) {
         return 0;
     }
 
+    balance -= amount;
+
     history.push_back("Withdraw: -$" + std::to_string(amount));
 
     return amount;
@@ -97,7 +101,7 @@ void showHistory(const std::vector<std::string>& history) {
         std::cout << "No transactions yet.\n";
         return;
     }
-    for (int i = 0; i < history.size(); i++) {
+    for (size_t i = 0; i < history.size(); i++) {
         std::cout << history[i] << std::endl;
     }
 }
