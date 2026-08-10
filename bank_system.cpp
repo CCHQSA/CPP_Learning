@@ -15,7 +15,7 @@ void deposit(double& balance, std::vector<Transaction>& history, double& totalDe
 void withdraw(double& balance, std::vector<Transaction>& history, double& totalWithdraws, int& numOfWithdraws);
 void showHistory(const std::vector<Transaction>& history);
 void clearHistory(std::vector<Transaction>& history);
-double findLargestTransaction(std::vector<Transaction>& history);
+double findLargestTransaction(const std::vector<Transaction>& history);
 void showStatistics(double& totalDeposits,double& totalWithdraws, int& numOfDeposits, int& numOfWithdraws, std::vector<Transaction>& history);
 
 
@@ -138,18 +138,20 @@ void clearHistory(std::vector<Transaction>& history) {
     }
 }
 
-double findLargestTransaction(std::vector<Transaction>& history) {
+double findLargestTransaction(const std::vector<Transaction>& history) {
     if (history.empty()) {
-        return 0.0; 
+        return 0.0;
     }
 
-    std::vector<double> amounts;
-    for (const auto& tx : history) {
-        amounts.push_back(tx.amount); 
+    double largest = history[0].amount;
+
+    for (const Transaction& transaction : history) {
+        if (transaction.amount > largest) {
+            largest = transaction.amount;
+        }
     }
 
-    auto max_it = std::max_element(amounts.begin(), amounts.end());
-    return *max_it;
+    return largest;
 }
 
 void showStatistics(double& totalDeposits,double& totalWithdraws, int& numOfDeposits, int& numOfWithdraws, std::vector<Transaction>& history){
