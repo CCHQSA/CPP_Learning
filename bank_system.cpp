@@ -10,8 +10,8 @@ struct Transaction {
 };
 
 void showBalance(double balance);
-double deposit(double& balance, std::vector<Transaction>& history);
-double withdraw(double& balance, std::vector<Transaction>& history);
+void deposit(double& balance, std::vector<Transaction>& history);
+void withdraw(double& balance, std::vector<Transaction>& history);
 void showHistory(const std::vector<Transaction>& history);
 void clearHistory(std::vector<Transaction>& history);
 
@@ -67,7 +67,7 @@ void showBalance(double balance) {
     std::cout << "Your current balance is: $" << std::fixed << std::setprecision(2) << balance << std::endl;
 }
 
-double deposit(double& balance, std::vector<Transaction>& history) {
+void deposit(double& balance, std::vector<Transaction>& history) {
     Transaction transaction;
     double amount = 0;
     std::cout << "Enter the amount to deposit: ";
@@ -75,7 +75,7 @@ double deposit(double& balance, std::vector<Transaction>& history) {
     
     if (amount <= 0) {
         std::cout << "Invalid amount. Deposit failed." << std::endl;
-        return 0;
+        return;
     }
 
     balance += amount;
@@ -83,10 +83,9 @@ double deposit(double& balance, std::vector<Transaction>& history) {
     transaction.name = "Deposit";
     transaction.amount = amount;
     history.push_back(transaction);
-    return amount;
 }
 
-double withdraw(double& balance, std::vector<Transaction>& history) {
+void withdraw(double& balance, std::vector<Transaction>& history) {
     Transaction transaction;
     double amount = 0;
     std::cout << "Enter the amount to withdraw: ";
@@ -94,12 +93,12 @@ double withdraw(double& balance, std::vector<Transaction>& history) {
 
     if (amount <= 0) {
         std::cout << "Invalid amount. Withdrawal failed." << std::endl;
-        return 0;
+        return;
     }
 
     if (amount > balance) {
         std::cout << "Insufficient funds. Withdrawal failed." << std::endl;
-        return 0;
+        return;
     }
 
     balance -= amount;
@@ -107,8 +106,6 @@ double withdraw(double& balance, std::vector<Transaction>& history) {
     transaction.name = "Withdrawal";
     transaction.amount = amount;
     history.push_back(transaction); 
-
-    return amount;
 }
 
 void showHistory(const std::vector<Transaction>& history) {
