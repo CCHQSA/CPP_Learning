@@ -8,6 +8,7 @@ void showBalance(double balance);
 double deposit(double& balance, std::vector<std::string>& history);
 double withdraw(double& balance, std::vector<std::string>& history);
 void showHistory(const std::vector<std::string>& history);
+void clearHistory(std::vector<std::string>& history);
 
 int main() {
     double balance = 0;
@@ -21,7 +22,8 @@ int main() {
         std::cout << "2. Deposit" << std::endl;
         std::cout << "3. Withdraw" << std::endl;
         std::cout << "4. History" << std::endl;
-        std::cout << "5. Exit" << std::endl;
+        std::cout << "5.Clear History" << std::endl;
+        std::cout << "6. Exit" << std::endl;
         std::cout << "Enter your choice: ";
         std::cin >> choice;
 
@@ -43,12 +45,15 @@ int main() {
                 showHistory(history);
                 break;
             case 5:
+                clearHistory(history);
+                break;
+            case 6:
                 std::cout << "Exiting the program. Thank you!" << std::endl;
                 break;
             default:
                 std::cout << "Invalid choice. Please try again." << std::endl;
         }
-    } while(choice != 5);
+    } while(choice != 6);
 
     return 0;
 }
@@ -103,5 +108,15 @@ void showHistory(const std::vector<std::string>& history) {
     }
     for (size_t i = 0; i < history.size(); i++) {
         std::cout << history[i] << std::endl;
+    }
+}
+
+
+void clearHistory(std::vector<std::string>& history){
+    if(!history.empty()){
+        history = {};
+        std::cout<<"History has been deleted";
+    }else{
+        std::cout<<"History already clear";
     }
 }
